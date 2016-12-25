@@ -1,0 +1,3 @@
+[submodule "bundle/indexer"]
+	path = bundle/indexer
+	url = git@github.com:dimonomid/vim-indexer
