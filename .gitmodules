@@ -1,6 +1,7 @@
 [submodule "bundle/indexer"]
 	path = bundle/indexer
 	url = git@github.com:dimonomid/vim-indexer
+	branch = master
 [submodule "bundle/dfrank_util"]
 	path = bundle/dfrank_util
 	url = git@github.com:dimonomid/vim-dfrank-util
