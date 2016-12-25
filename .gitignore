@@ -1,7 +1,7 @@
 tags
 tags-ja
-vimprj/tags
-vimprj/*_tags
+.vimprj/tags
+.vimprj/*_tags
 _vimrc_winpos
 *.pyc
 *.cache

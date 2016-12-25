@@ -1,0 +1,7 @@
+
+[%dir_name(..)%]
+
+$INDEXER_PROJECT_ROOT/**/*
+
+
+
