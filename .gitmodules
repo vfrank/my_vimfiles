@@ -1,3 +1,9 @@
 [submodule "bundle/indexer"]
 	path = bundle/indexer
 	url = git@github.com:dimonomid/vim-indexer
+[submodule "bundle/dfrank_util"]
+	path = bundle/dfrank_util
+	url = git@github.com:dimonomid/vim-dfrank-util
+[submodule "bundle/vimprj"]
+	path = bundle/vimprj
+	url = git@github.com:dimonomid/vim-vimprj
