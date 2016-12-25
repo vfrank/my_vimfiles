@@ -1,0 +1,26 @@
+
+set tabstop=3         " размер таба - 3
+set shiftwidth=3      " ширина отступа - 3 пробела
+set expandtab         " юзаем пробелы вместо символов таб
+
+" ------------------------ persistent undo -----------------------
+" включаем только если версия >= 7.3
+if v:version >= 703
+   " включим опцию persistent undo
+   set undofile
+
+   " сделаем так, чтобы файлы undo появлялись не в текущей директории, а в нашей
+   if has('win32') || has('win64')
+      let s:undodir=$VIM.'/undofiles'
+   else
+      let s:undodir=$HOME.'/.vim/undofiles'
+   endif
+   let &undodir=s:undodir
+
+   " если каталог не существует, создадим его рекурсивно
+   if !isdirectory(s:undodir)
+      call mkdir(s:undodir, 'p', 0700)
+   endif
+endif
+" ----------------------------------------------------------------
+

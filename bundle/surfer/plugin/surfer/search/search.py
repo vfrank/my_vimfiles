@@ -1,0 +1,126 @@
+# -*- coding: utf-8 -*-
+"""
+surfer.search.search
+~~~~~~~~~~~~~~~~~~~~
+
+This module defines the matching function used for searching tags.
+"""
+
+from __future__ import division
+
+
+def match(needle, haystack, smart_case):
+    """To search for `needle` in `haystack`.
+
+    Returns a tuple of two elements: a number and another tuple.
+    The number is a measure of the similarity between `needle` and `haystack`,
+    whereas the other tuple contains the positions where the match occurs in
+    `haystack`.
+
+    If there are multiple matches, the one with the best similarity value
+    (the lowest value) is returned.
+    """
+    if not needle:
+        return -99, tuple()
+
+    # If `haystack` has only uppercase characters then it makes no sense
+    # to treat an uppercase letter as a word-boundary character
+    uppercase_is_word_boundary = not haystack.isupper()
+
+    # `matchers` keep track of all possible matches of `needle`
+    # along `haystack`
+    matchers = [{
+        "needle_idx": 0,
+        # the following list (or strings) have the same length (always)
+        "positions": [],  # e.g. [1,2,3,4,..]
+        "consumed": "",
+        "boundaries": [],  # e.g. [True,False,False,True,...]
+    }]
+
+    best_positions = tuple()
+    best_similarity = -99
+
+    needle_len = len(needle)
+    haystack_len = len(haystack)
+
+    for i, c in enumerate(haystack):
+
+        forks = []
+        for matcher in matchers:
+            idx = matcher["consumed"].find(c.lower())
+            if idx >= 0 and len(needle[idx:]) <= haystack_len - i:
+                forks.append({
+                    "needle_idx": idx,
+                    "consumed": matcher["consumed"][:idx],
+                    "positions": matcher["positions"][:idx],
+                    "boundaries": matcher["boundaries"][:idx],
+                })
+
+        matchers.extend(forks)
+
+        for matcher in matchers:
+
+            if matcher["needle_idx"] == needle_len:
+                continue
+
+            if smart_case and needle[matcher["needle_idx"]].isupper():
+                cond = c == needle[matcher["needle_idx"]]
+            else:
+                cond = c.lower() == needle[matcher["needle_idx"]].lower()
+
+            if cond:
+
+                if (i == 0 or (uppercase_is_word_boundary and c.isupper()) or
+                    (i > 0 and haystack[i-1] in ('-', '_'))):
+                    matcher["boundaries"].append(True)
+                else:
+                    matcher["boundaries"].append(False)
+
+                matcher["consumed"] += needle[matcher["needle_idx"]].lower()
+                matcher["positions"].append(i)
+                matcher["needle_idx"] += 1
+
+                if matcher["needle_idx"] == needle_len:
+
+                    boundaries_count = len(filter(None, matcher["boundaries"]))
+                    s = similarity(haystack_len, matcher["positions"], boundaries_count)
+                    if best_similarity == -99 or s < best_similarity:
+                        best_similarity = s
+                        best_positions = tuple(matcher["positions"])
+
+    return best_similarity, best_positions
+
+
+def similarity(haystack_len, positions, boundaries_count):
+    """ To compute the similarity between `haystack` and `needle` given the
+    length of `haystack` and the positions where `needle` matches in
+    `haystack`.
+
+    Returns a number that measure the similarity betwee the two strings. The
+    lower this number is, the two strings are.
+    """
+    if not positions:
+        return -99
+
+    n = 0
+    diffs_sum = 0
+    contiguous_sets = 0
+    positions_sum = 0
+
+    # Generate all `positions` combinations for k = 2
+    positions_len = len(positions)
+    for i in range(positions_len):
+
+        positions_sum += positions[i]
+
+        if i > 0 and positions[i-1] != positions[i] - 1:
+            contiguous_sets += 1
+
+        for j in range(i, positions_len):
+            if i != j:
+                diffs_sum += abs(positions[i]-positions[j])
+                n += 1
+
+    gravity = (positions_sum/positions_len) / haystack_len
+    compactness = diffs_sum/n if n > 0 else 0
+    return gravity + compactness + contiguous_sets - (boundaries_count * 2.0)

@@ -1,0 +1,14 @@
+tags
+tags-ja
+vimprj/tags
+vimprj/*_tags
+_vimrc_winpos
+*.pyc
+*.cache
+machine_local_conf/current
+swisscalc/autoload/history
+swisscalc/autoload/session
+
+surfer.log
+search.so
+

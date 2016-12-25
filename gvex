@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# run gvim
+gvim --remote-silent $1
+
+# on Linux Mint, if there is already instance of gvim working,
+# new file is opened in existing gvim, but gvim isn't brought to foreground.
+# this command brings it to foreground
+#  (you need to install it:   # apt-get install wmctrl   )
+wmctrl -a " - GVIM"
+

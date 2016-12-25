@@ -1,0 +1,69 @@
+current filename is "my_file"
+
+:ls
+
+1 [NoName]
+2 my_file
+3 some_other_file
+
+
+:saveas new_file
+
+on autocommands: 
+'%' and '<afile> is 'new_file'
+'#' is 'my_file'
+
+
+:ls
+
+1 [NoName]
+2 new_file
+3 some_other_file
+4 my_file
+
+--------------------------
+current filename is "my_file"
+
+:ls
+
+1 [NoName]
+2 my_file
+3 some_other_file
+
+(Учти: тут текущий файл - НЕ noname! у него уже есть имя, и просто сохраняется под другим именем.)
+:w new_file
+
+on autocommands: 
+'%' is 'my_file'
+'#' and '<afile> is 'new_file'
+
+:ls
+
+1 [NoName]
+2 my_file
+3 some_other_file
+4 new_file
+
+---------------------------------
+
+current filename is "[No Name]"
+
+:ls
+
+1 [No Name]
+2 some_other_file
+
+
+:w new_file
+
+on autocommands: 
+'%' and '<afile> is 'new_file'
+'#' is '', bufnr == -1 !
+
+
+:ls
+
+1 new_file
+2 some_other_file
+
+

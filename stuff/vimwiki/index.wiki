@@ -1,0 +1,80 @@
+
+=== Vimfiles wiki ===
+
+==== BUGS ====
+
+* [ ] vimprj: сначала открой файл из какого-нибудь проекта потом _ПЕРЕТАЩИ_ в окно Вима файл из другого проекта: новый файл будет записан в проект первого файла, вместо своего настоящего проекта.
+
+==== TODO ====
+
+* [ ] нужно написать Francisco о том, что нужна возможность задавать опции для clang не только в .clang_complete, а и из vimscript, причем, наверное, нужно чтобы была возможность вообще отключить поиск файла .clang_complete (то есть, опциями целиком рулит пользователь, сам плагин clang_complete ничего не знает об этом)
+
+
+
+==== Настройка clang_complete под Ubuntu Linux (or Linux Mint) ====
+
+Install clang:
+
+{{{
+# apt-get install clang
+# apt-get install libclang1
+# apt-get install libclang-dev
+# apt-get install python-psutil
+  }}}
+
+==== Настройка clang_complete под Windows ====
+
+
+* Скачать zip-файл отсюда: http://dfrank.ru/usr/experience/clang/put_to_PATH.zip и распаковать его так, чтобы файлы оказались в PATH (я обычно кладу просто в `C:/Windows/System32`)  (на всякий случай, чуть ниже написано, откуда были взяты файлы из этого архива)
+* Скачать python отсюда http://www.python.org/download/ (я использовал версию 2.7)
+* Скачать и установить psutils http://code.google.com/p/psutil/downloads/list для нужной версии питона
+* для микрочиповских проектов: скопировать стандартные директории include и support:
+   "C:\Program Files\Microchip\mplabc30\v3.25\include" -> D:\projects\Microchip\mplabc30\v3.25\include
+   "C:\Program Files\Microchip\mplabc30\v3.25\support" -> D:\projects\Microchip\mplabc30\v3.25\support
+
+----------------------------------------------
+   На всякий случай:
+
+Файлы из архива put_to_PATH.zip были получены следующим образом:
+* Скачать виндовые бинарники отсюда: http://www.ishani.org/web/articles/code/clang-win32/
+* Положить их так, чтобы они оказались в PATH (я обычно кладу просто в C:/Windows/System32)
+* Скачать 2 dll-ки:  msvcp100.dll http://www.dll-files.com/dllindex/dll-files.shtml?msvcp100
+                     msvcr100.dll http://www.dll-files.com/dllindex/dll-files.shtml?msvcr100
+  И тоже положить в PATH
+
+
+----------------------------------------------
+
+Если скачиваешь новую версию clang_complete, внеси туда требуемые изменения:
+
+* let item['icase'] = 1       В двух местах! для libclang и для clang.
+* handling of absolute path
+* закомментируй   python WarmupCache()
+  это потому, что на момент вызова этого WarmupCache() мой envcontrol еще не вызывался и, следовательно, не приготовил `g:clang_user_options`. Нужно рассказать Francisco об этом.
+* может, еще добавить функцию `ClangCompleteWarmupCache()`
+
+
+==== clang_complete подводные камни ====
+
+   * libclang не понимает закавыченных путей, то есть, вот такой аргумент он не поймет:
+      -I"/some/path"
+     нужно так:
+      -I/some/path
+     и получается, что никак не передать пути, содержащие пробелы.
+   * при работе с бинарником clang и (при установленном lazyredraw или autocomplpop) 
+     меню автодополнения прячется.
+     Если работать с libclang, то, вроде бы, все ок.
+
+==== clang_complete TODO ====
+
+   * [ ] Сделать так, чтобы можно было переключаться между omnicppcomplete и clang_complete.
+   * [ ] Определять наличие libclang.dll и clang (делается так: `executable("libclang.dll")`. только не забудь про `if has('win32')` ), и если dll отсутствует, то переключать в режим binary clang. Если clang тоже отсутствует, то переключать на omnicppcomplete
+   * [ ] Настраивать пути для clang_complete динамически, наверное с помощью envcontrol.
+
+
+
+
+==== Reminders ====
+
+* Если при запуске gvim вообще молча не запускается, а консольный - запускается, то это, возможно, вызвано тем, что в системе не установлен python.
+
