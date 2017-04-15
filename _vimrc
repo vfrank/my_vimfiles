@@ -1575,3 +1575,7 @@ let g:jsx_ext_required = 0
 " gets preserved
 let g:go_fmt_experimental = 1
 
+" --------------------- vim-gurl ---------------------
+
+let g:vimgurl_yank_register = '+'
+
