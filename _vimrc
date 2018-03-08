@@ -123,11 +123,11 @@ unlet s:sWinposScript
 "exec 'source '.s:sPath.'/colors/automation.vim'
 
 "source $VIMRUNTIME/colors/darkblue.vim
-"source $VIMRUNTIME/colors/desert.vim
+source $VIMRUNTIME/colors/desert.vim
 "source $VIMRUNTIME/colors/peachpuff.vim
 "source $VIMRUNTIME/colors/github.vim
 
-exec 'source '.s:sPath.'/colors/lucius.vim'
+"exec 'source '.s:sPath.'/colors/lucius.vim'
 :LuciusLightHighContrast
 
 "let loaded_matchparen = 1
@@ -364,7 +364,8 @@ filetype plugin indent on
 if has('win32') || has('win64')
    set guifont=Consolas:h9:cRUSSIAN
 else
-   set guifont=Consolas\ 9
+   "set guifont=Consolas\ 9
+   set guifont=Inconsolata\ 9
 endif
 "set guifont=Courier\ New\ Cyr
 "set guifont=Terminus:h12:cRUSSIAN
@@ -1097,11 +1098,11 @@ let g:vimprj_changeCurDirIfVimprjFound = 1
 function! <SID>SetMainDefaults()
 
    if &filetype != 'ruby' && &filetype != 'eruby' && &filetype != 'css' && &filetype != 'scss' && &filetype != 'python'
-      set tabstop=2         " размер таба - 4
-      set shiftwidth=2      " ширина отступа - 4 пробела
+      set tabstop=4         " размер таба - 4
+      set shiftwidth=4      " ширина отступа - 4 пробела
    else
-      set tabstop=2
-      set shiftwidth=2
+      set tabstop=4
+      set shiftwidth=4
    endif
    set expandtab         " юзаем пробелы вместо символов таб
 
@@ -1466,7 +1467,7 @@ let g:EasyClipUseCutDefaults = 0
 "let g:AutoPairsMapCR = 0
 let g:AutoPairsCenterLine = 0
 let g:AutoPairsDelRepeatedPairs = 0
-let g:AutoPairsUseInsertedCount = 1
+let g:AutoPairsUseInsertedCount = 0
 
 " --------------------- php-indent ---------------------
 " (not used right now)
